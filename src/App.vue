@@ -4,9 +4,9 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <h1 class="text-1xl font-bold underline bg-red-500">
-    Hello world!
-  </h1>
+  <main class="bg-red-500">
+    <RouterLink to="/AfspraakMaken">Afspraak Maken</RouterLink>
+  </main>
 
   <RouterView />
 </template>
