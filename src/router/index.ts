@@ -17,7 +17,23 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AfspraakMaken.vue'),
     },
+    {
+      path: '/admin/AdminAfspraken',
+      name: 'AdminAfspraken',
+      component: () => import('../views/admin/AdminAfspraken.vue'),
+      // meta: { requiresAdmin: true }, // 👈 belangrijk
+    },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const isAdmin = localStorage.getItem('isAdmin') === 'true'
+
+  if (to.meta.requiresAdmin && !isAdmin) {
+    next('/') // of naar login pagina
+  } else {
+    next()
+  }
 })
 
 export default router

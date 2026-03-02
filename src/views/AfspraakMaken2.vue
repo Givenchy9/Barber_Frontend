@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-xl mx-auto p-6 mt-20 bg-white rounded-2xl shadow-lg">
+  <div class="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
     <h1 class="text-2xl font-bold mb-6 text-center">Maak een afspraak</h1>
 
     <form @submit.prevent="submitForm" class="space-y-4">
@@ -52,37 +52,16 @@
       </div>
 
       <!-- Submit -->
-      <RouterLink to="/" class="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
-        Terug
-      </RouterLink>
       <button type="submit"
         class="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
         Afspraak maken
       </button>
     </form>
   </div>
-  <!-- Modal -->
-  <div v-if="showModal" class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-    <div class="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full">
-      <h2 class="text-xl font-bold mb-4">Afspraak bevestigd! ✂️</h2>
-      <p>Kan de afspraak niet doorgaan? Bel: ...</p><br>
-      <!-- <p><strong>Naam:</strong> {{ submittedData.name }}</p> -->
-      <!-- <p><strong>Telefoon:</strong> {{ submittedData.phone }}</p> -->
-      <p><strong>Datum:</strong> {{ submittedData.date }}</p>
-      <p><strong>Tijd:</strong> {{ submittedData.time }}</p>
-      <p><strong>Behandeling:</strong> {{ submittedData.service }}</p>
-      <p><strong>Opmerkingen:</strong> {{ submittedData.notes || 'Geen' }}</p>
-
-      <button @click="showModal = false"
-        class="mt-4 w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition">
-        Sluiten
-      </button>
-    </div>
-  </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 
 const form = reactive({
   name: '',
@@ -93,22 +72,13 @@ const form = reactive({
   notes: ''
 })
 
-const showModal = ref(false)
-const submittedData = reactive({
-  name: '',
-  phone: '',
-  date: '',
-  time: '',
-  service: '',
-  notes: ''
-})
-
-
 const submitForm = async () => {
   try {
     const response = await fetch('http://localhost:8000/api/appointments', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(form)
     })
 
@@ -118,11 +88,7 @@ const submitForm = async () => {
     }
 
     const data = await response.json()
-
-    // Vul de modal met de ingevoerde data
-    Object.assign(submittedData, form)
-
-    showModal.value = true // modal tonen
+    alert(`Afspraak succesvol gemaakt voor ${data.appointment.name} ✂️`)
 
     // Form reset
     form.name = ''
@@ -137,5 +103,4 @@ const submitForm = async () => {
     console.error(error)
   }
 }
-
 </script>
